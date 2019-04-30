@@ -1,0 +1,121 @@
+MarkerInterface
+
+Purpose of conveying metadata about the class to its consumers without creating a separate type for it.
+Serializable interface has the specific ability to store an object into byte stream and its reverse process.
+When you mark your class as Serialzable it just tells that this class can be converted to bytes.
+
+Serialization is a mechanism of converting the state of an object into a byte stream. 
+Deserialization is the reverse process where the byte stream is used to recreate the actual Java object in memory.
+This mechanism is used to persist the object.
+
+Marker interface is used as a tag to inform a message to the Java compiler so that it can add special behaviour to the class implementing it. Java marker interface has no members in it.
+Lets take the java.io.Serializable marker interface. It does not have any members defined it it. When a Java class is to be serialized, you should intimate the Java compiler in some way that there is a possibility of serializing this java class. In this scenario, marker interfaces are used. The java class which may be serialized has to implement the java.io.Serializable marker interface. In such way, we are intimating the java compiler.
+From java 1.5, the need for marker interface is eliminated by the introduction of the java annotation feature. So, it is wise to use java annotations than the marker interface. It has more feature and advantages than the java marker interface.
+
+“An interface is called a marker interface when it is provided as a handle by Java interpreter to mark a class so that it can provide special behaviour to it at runtime and they do not have any method declarations”.
+
+I don’t think, in future there will be any new marker interfaces added.
+
+We cannot create marker interfaces, as you cannot instruct JVM to add special behavior to all classes implementing (directly) that special interface.
+Java Marker Interface Examples
+java.lang.Cloneable
+java.io.Serializable
+java.util.EventListener
+
+$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+
+Why we use marker interface in Java programming language
+Marker interface having no method declaration inside it . it's just an empty interface then why we use it.
+
+1.
+They are used to provide some essential information to the JVM so that JVM may perform some useful operation.
+
+Marker interface is an empty interface where in doesn't have any fields or methods in it. It is used to give some kind of command to jvm or a compiler. Example are Serializable, Clonnable etc.. When we implement empty interface, it tells compiler to do some operations. if the class is serializable then perform serialize operation and same way if the class is clonnable then it perform clone operation.
+
+Marker interface means empty inteface.They are used because we are telling to JVM that that class have special behaviour.
+eg. by serilizable we are telling to JVM class is Seriliazable.
+by Cloneable we are telling to JVM class is Cloneable.
+
+In simple words Marker Interface is an interface with no fields or method within it. It helps in identifying the special object from normal objects. It just conveys to JVM that the class implementing an interface of this category will have some special behaviour. Also we can't create marker interface as you can't instruct JVM to add special behaviour to all classes implementing special interface. Now a days we do not use Marker Interface, all it's work is done by annotations.
+
+Most of the answers given by people are correct, only a small correction. 1-2 answers are relationg marker interface with object state (serialization) which is not true. Serializable is one of the marker interfaces, but not every time...Follwing are the marker interfaces present in JDK:
+1) java.io.Serializable
+2) java.lang.Cloneable
+3) javax.servlet.SingleThreadModel
+4) javax.ejb.EnterpriseBean
+5) java.util.RandomAccess
+6) java.rmi.Remote
+7) java.util.EventListener
+
+Marker interface in Java is interfaces with no field or methods or in simple word empty interface in java is called marker interface. Example of market interface is Serializable, Clonnable and Remote interface. Now if marker interface doesn't have any field or method or behavior they why would Java needs it? This was asked to my friend in one of his core java interview and then I thought to touch based on it. In this article we will see couple of reason on what marker interface do in Java and what is use of marker interface in Java. Marker interface are also called tag interface in Java.
+
+What is Marker interfaces in Java and why required
+Why Marker or Tag interface do in Java
+1) Looking carefully on marker interface in Java e.g. Serializable, Clonnable and Remote it looks they are used to indicate something to compiler or JVM. So if JVM sees a Class is Serializable it done some special operation on it, similar way if JVM sees one Class is implement Clonnable it performs some operation to support cloning. Same is true for RMI and Remote interface.
+
+$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+
+*The marker interface provides a way to associate metadata with the class where the language support is not available*
+
+Marker Interface in java is an interface with no fields or methods within it. It is used to convey to the JVM that the class implementing an interface of this category will have some special behavior.
+
+Hence, an empty interface in java is called a marker interface. Marker interface is also called tag interface by some java gurus. In java we have the following major marker interfaces as under:
+
+Searilizable interface
+Cloneable interface
+Remote interface
+ThreadSafe interface
+The marker interface can be described as a design pattern which is used by many languages to provide run-time type information about the objects. The marker interface provides a way to associate metadata with the class where the language support is not available.
+
+A normal interface specifies functionality which an implementing class must implement. But a marker interface does not follow that pattern. On the other side, the implementing class defines the behavior. There are some hybrid interfaces which act as a marker interface along with some methods. But this type of design is confusing if not handled carefully.
+
+Usage of Marker Interface in java:
+Marker interface in Java e.g. Serializable, Clonnable and Remote is used to indicate something to compiler or JVM that the class implementing any of these would have some special behavior. Hence, if the JVM sees a Class is implementing the Serializable interface it does some special operation on it and writes the state of the object into object stream. This object stream is then available to be read by another JVM. Similarly if JVM finds that a class is implementing Clonnable interface, it performs some special operation in order to support cloning. The same theory goes for RMI and Remote interface. This indication (to the JVM) can also be done using a boolean flag or a String variable inside the class.
+
+Apart from using the built-in marker interface, to mark a class as serializable or clonnable, we can also have our own marker interface. Marker interface is a good way to logically segregate the code and also if we have our own tool to perform some preprocessing operation on the classes. It is very useful for developing frameworks or APIs e.g. struts or spring.
+
+With the introduction of annotation in java 5, annotation has become a better choice over maker interface.
+
+The Thread Safe interface is a marker interface which can be used to communicate to other developers that classes implementing this marker interface gives thread-safe guarantee and any modification should not violate that. Marker interface also helps code coverage or code review tool to find bugs based on specified behavior of marker interfaces. Here also annotations are better choice. @ThreadSafe looks lot better than implementing Thread Safe marker interface.
+
+In short a marker interface in Java is used to indicate something to compiler, JVM or any other tool but Annotation is better way of doing same thing.
+
+$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+
+I have learned that it actually has nothing to do with the compiler or the JVM. For example, in case of Serializable interface the method writeObject(Object) of ObjectOutputStream does something like instanceOf Serializable to detect whether the class implements Serializable & throws NotSerializableException accordingly. Everything is handled in the code and this seems to be a design-pattern so I think we can define our own marker interfaces.
+
+1.
+Is the definition of a marker interface mentioned above in 1st point wrong? - It is correct in the parts that (1) a marker interface must be empty, and (2) implementing it is meant to imply some special treatment of the implementing class. The part that is incorrect is that it implies that JVM or the compiler would treat the objects of that class differently: you are correct in observing that it is the code of Java class library that treats these objects as cloneable, serializable, etc. It has nothing to do with the compiler or the JVM.
+
+2.
+instead of using the instanceOf operator why can't the method be something like writeObject(Serializable) so that there is a compile-time type checking - This lets you avoid polluting your code with the name of the marker interface when a "plain Object" is needed. For example, if you make a class that needs to be serializable, and has object members, you would be forced to either do casting or make your objects Serializable at compile time. This is inconvenient, because the interface is devoid of any functionality.
+
+3.
+How Annotations are better than Marker Interfaces? - They let you achieve the same purpose of conveying metadata about the class to its consumers without creating a separate type for it. Annotations are more powerful, too, letting programmers pass more sophisticated information to classes that "consume" it.
+
+$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+
+I know marker interface in java. It is used to define a specific behaviour about a class. For example, Serializable interface has the specific ability to store an object into byte stream and its reverse process. But I don't know where this specific behaviour is implemented, because it doesn't have any method in it.
+
+1. How JVM invoke this specific behaviour?
+2. How to write our own marker interface? Can you give me a simple user defined marker interface for my understanding?
+3. Is it possible to have methods in marker interface?
+
+1. Serialization is handled by the ObjectInputStream and ObjectOutputStream classes. If a class has special serialization needs, the methods to create are outlined in the API. Reflection is used to invoke these methods.
+2. The same way you would write any other interface.
+3. There's nothing stopping you from putting methods in a marker interface.
+
+How JVM invoke this specific behavior
+ObjectOutputStream and ObjectInputStream will check your class whether or not it implementes Serializable, Externalizable. If yes it will continue or else will thrown NonSerializableException.
+
+How to write our own marker interface
+Create an interface without any method and that is your marker interface.
+Sample
+public interface IMarkerEntity {
+
+}
+If any class which implement this interface will be taken as database entity by your application.
+
+Is this possible to have methods in marker interface?
+The whole idea of Marker Interface Pattern is to provide a mean to say "yes I am something" and then system will proceed with the default process, like when you mark your class as Serialzable it just tells that this class can be converted to bytes.
+

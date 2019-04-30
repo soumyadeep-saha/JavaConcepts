@@ -1,0 +1,73 @@
+EmptyAbstractClassAndEmptyInterface
+
+Empty abstract classes don't make any sense to me, abstract classes should be used to inherit some behavior. So, I tend to agree, it's a pretty ugly design and a very bad use of abstract classes, marker interfaces should be preferred. So you have two options:
+1. Wait till you need to extend another class for a real need and get annoyed by the abstract class to replace it by an interface.
+2. Don't wait and fix the design.
+
+According to object oriented programming theory the main purpose for inheritance is polymorphism, code reuse and encapsulation. An empty abstract class (and when i say this i mean truly empty, no constructors, no methods, no properties. nothing!) does not achieve any of the three goals hoped by this programming technique. It is the equivalent to  if(true){...}. changing it to an interface does not really makes it any better.
+
+I suspect the reason for using those empty abstract classes is to identify a group of classes that must share something in common otherwise what would be the difference between Object and the abstract class
+
+The key is that you can extend from only one abstract class, while you can implement more interfaces.
+Apparently the "empty abstract class" design desicion was made so that it prevents the implementing class from extending from another classes.
+If it was me I'd let it go, otherwise it might break. Best is still to contact the original developers and ask for reasoning (and add them as comments in the abstract class for your and future convenience).
+
+Done ( contact people ) and i discover that the reason was : hibernate mapping.
+
+0
+
+If you have the following pattern you will find it to be the most flexible:
+
+interface Fooable
+{
+   void foo();
+   void bar();
+}
+
+abstract class AbstractFoo
+    implements Fooable
+{
+}
+
+class Foo
+    extends AbstractFoo
+{
+   public void foo()
+   {
+   }
+
+   public void bar()
+   {
+   }
+}
+This way you can always pass by the interface but if you later find that you have code that can be common you can put it in the abstract class without having to make changes to all of the classes.
+
+Unless you have a good reason for not doing that pattern (and I suspect you don't in this case) I would suggest using it. This can wind up with empty abstract classes but I think it is ok (a little odd, but ok).
+
+If there truly are no methods in the interface or only one then I would skip the abstract class.
+
+From a compiler/functional point of view there is no real difference between an interface and an abstract class where all method are abstract. The interface will be more flexible than the abstract class, and the interface + abstract class will be the most flexible of all.
+
+If it were my code I'd make the change to them being interfaces.
+
+No use. It is the moral equivalent of a marker interface.
+
+An empty abstract class is very much equivalent to an interface except that it can extend a class
+abstract class myAbstractClass // extends anotherClass implements anInterface
+{
+
+}
+
+interface myInterface // extends anotherInterface
+{
+
+}
+In my book interfaces extends other interfaces.
+This pattern is called Marker interface and SO has a lot of good data about it already: 
+What is the purpose of a marker interface?
+https://stackoverflow.com/questions/1023068/what-is-the-purpose-of-a-marker-interface
+
+
+
+
+

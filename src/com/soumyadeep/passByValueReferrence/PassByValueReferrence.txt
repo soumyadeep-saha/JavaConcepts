@@ -1,0 +1,94 @@
+PassByValueReferrence
+
+When a parameter is passed by reference, the caller and the callee use the same variable for the parameter. If the callee modifies the parameter variable, the effect is visible to the caller's variable.
+
+When a parameter is passed by value, the caller and callee have two independent variables with the same value. If the callee modifies the parameter variable, the effect is not visible to the caller.
+
+Passing such a reference falls under pass-by-value because a variable's value is technically the reference itself, not the referred object. However, the net effect on the program can be the same as either pass-by-value or pass-by-reference:
+
+If a reference is just taken from a caller's variable and passed as an argument, this has the same effect as pass-by-reference: if the referred object is mutated in the callee, the caller will see the change.
+However, if a variable holding this reference is reassiged, it will stop pointing to that object, so any further operations on this variable will instead affect whatever it is pointing to now.
+To have the same effect as pass-by-value, a copy of the object is made at some point. Options include:
+The caller can just make a private copy before the call and give the callee a reference to that instead.
+In some languages, some object types are "immutable": any operation on them that seems to alter the value actually creates a completely new object without affecting the original one. So, passing an object of such a type as an argument always has the effect of pass-by-value: a copy for the callee will be made automatically if and when it needs a change, and the caller's object will never be affected.
+
+Java is always pass-by-value. Unfortunately, when we pass the value of an object, we are passing the reference to it. This is confusing to beginners.
+
+It goes like this:
+
+public static void main(String[] args) {
+    Dog aDog = new Dog("Max");
+    Dog oldDog = aDog;
+
+    // we pass the object to foo
+    foo(aDog);
+    // aDog variable is still pointing to the "Max" dog when foo(...) returns
+    aDog.getName().equals("Max"); // true
+    aDog.getName().equals("Fifi"); // false
+    aDog == oldDog; // true
+}
+
+public static void foo(Dog d) {
+    d.getName().equals("Max"); // true
+    // change d inside of foo() to point to a new Dog instance "Fifi"
+    d = new Dog("Fifi");
+    d.getName().equals("Fifi"); // true
+}
+
+In the example above aDog.getName() will still return "Max". The value aDog within main is not changed in the function foo with the Dog "Fifi" as the object reference is passed by value. If it were passed by reference, then the aDog.getName() in main would return "Fifi" after the call to foo.
+
+But there is a subtle difference. Look at the first example. If it was purely pass by reference, aDog.name would be "Fifi". It isn't - the reference you are getting is a value reference that if overwritten will be restored when exiting the function.
+
+The Java Spec says that everything in Java is pass-by-value. There is no such thing as "pass-by-reference" in Java.
+
+The key to understanding this is that something like
+
+Dog myDog;
+is not a Dog; it's actually a pointer to a Dog.
+
+What that means, is when you have
+
+Dog myDog = new Dog("Rover");
+foo(myDog);
+you're essentially passing the address of the created Dog object to the foo method.
+
+(I say essentially because Java pointers aren't direct addresses, but it's easiest to think of them that way)
+
+Suppose the Dog object resides at memory address 42. This means we pass 42 to the method.
+
+if the Method were defined as
+
+public void foo(Dog someDog) {
+    someDog.setName("Max");     // AAA
+    someDog = new Dog("Fifi");  // BBB
+    someDog.setName("Rowlf");   // CCC
+}
+let's look at what's happening.
+
+the parameter someDog is set to the value 42
+at line "AAA"
+someDog is followed to the Dog it points to (the Dog object at address 42)
+that Dog (the one at address 42) is asked to change his name to Max
+at line "BBB"
+a new Dog is created. Let's say he's at address 74
+we assign the parameter someDog to 74
+at line "CCC"
+someDog is followed to the Dog it points to (the Dog object at address 74)
+that Dog (the one at address 74) is asked to change his name to Rowlf
+then, we return
+Now let's think about what happens outside the method:
+
+Did myDog change?
+
+There's the key.
+
+Keeping in mind that myDog is a pointer, and not an actual Dog, the answer is NO. myDog still has the value 42; it's still pointing to the original Dog (but note that because of line "AAA", its name is now "Max" - still the same Dog; myDog's value has not changed.)
+
+Pass-by-Value
+When a parameter is pass-by-value, the caller and the callee method operate on two different variables which are copies of each other. Any changes to one variable don’t modify the other.
+It means that while calling a method, parameters passed to the callee method will be clones of original parameters. Any modification done in callee method will have no effect on the original parameters in caller method.
+
+Pass-by-Reference
+When a parameter is pass-by-reference, the caller and the callee operate on the same object.
+It means that when a variable is pass-by-reference, the unique identifier of the object is sent to the method. Any changes to the parameter’s instance members will result in that change being made to the original value.
+

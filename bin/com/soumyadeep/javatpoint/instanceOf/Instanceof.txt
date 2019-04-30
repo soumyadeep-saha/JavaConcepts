@@ -1,0 +1,219 @@
+Instanceof
+
+“INSTANCEOF”, WHY AND HOW TO AVOID IT IN CODE
+The java “instanceOf” operator is used to test whether the object is an instance of the specified type (class or subclass or interface). It is also known as type comparison operator because it compares the instance with type. It returns either true or false. If we apply this operator with any variable that has null value, it returns false.
+Probably most of you have already heard that using “instanceOf” is a code smell and it is considered as a bad practice. While there is nothing wrong in it and may be required at certain times, but the good design would avoid having to use this keyword.
+
+Example of incorrect use of instanceOf
+class Animal {}
+class Fish extends Animal {
+  void swim(){
+    System.out.println(“Swim”);
+  }
+}
+class Bird extends Animal {
+  void fly(){
+    System.out.println(“Fly”);
+  }
+}
+class Kangaroo extends Animal {
+  void jump(){
+    System.out.println(“Jump”);
+  }
+}
+ 
+public final class BadUseOfInstanceOf {
+  public static void main(String[] args){
+     makeItMove(new Fish());
+     makeItMove(new Bird());
+     makeItMove(new Kangaroo());
+  }
+ 
+  public static void makeItMove(Animal animal){
+    if (animal instanceof Fish){
+      Fish fish = (Fish)animal;
+      fish.swim();
+    }
+    else if (animal instanceof Bird){
+      Bird bird = (Bird)animal;
+      bird.fly();
+    }
+    else if (animal instanceof Kangaroo){
+      Kangaroo kangaroo = (Kangaroo)animal;
+      kangaroo.jump();
+    }
+  }
+}
+
+Considering this code, we can say that it is implemented in this way because we obviously want different behaviors for different types, but here although objects are treated as they are of the superclass type, that type is not a useful abstraction because it’s not enough information to determine what you want to do with the object. Also, there is a maintainability concern because if we later add a new type of animal, we may forget or not find all the places where this behavior (if/else block) may be needed depending on the type. Except this, we must admit that the readability suffers after adding numerous cases.
+
+And then there is polymorphism which can be used to make the code better.
+Example of correct use of instanceOf
+class Animal {
+ 
+  void move(){
+ 
+    System.out.println(“Move”);
+ 
+  }
+ 
+}
+ 
+class Fish extends Animal {
+ 
+  @Override void move(){
+ 
+    System.out.println(“Swim”);
+ 
+  }
+ 
+}
+ 
+class Bird extends Animal {
+ 
+  @Override void move(){
+ 
+    System.out.println(“Fly”);
+ 
+  }
+ 
+}
+ 
+class Kangaroo extends Animal {
+ 
+  @Override void move(){
+ 
+    System.out.println(“Jump”);
+ 
+  }
+ 
+}
+ 
+  
+ 
+public final class ProperUseOfInstanceOf {
+ 
+ 
+ 
+  public static void main(String[] args){
+ 
+     makeItMove(new Fish());
+ 
+     makeItMove(new Bird());
+ 
+     makeItMove(new Kangaroo());
+ 
+  }
+ 
+ 
+ 
+  /**
+ 
+  * This method implementation doesn't care at all
+ 
+  * about Fish/Bird/Kangaroo. It just knows that it has
+ 
+  * been passed an Animal. Different versions of
+ 
+  * 'move' are called, specific to each Animal.
+ 
+  */
+ 
+  public static void makeItMove(Animal animal){
+ 
+    animal.move();
+ 
+  }
+ 
+}
+
+The result may not always be the purest code, but it will be much improved, cleaner and object-oriented. The techniques can be applied more generally to avoid “instanceOf” and replace if/else with polymorphism. If you want specific behavior depends on the type of object then that behavior should be encapsulated on the object itself.
+
+Unfortunately, this isn’t always the end of the story, because this kind of code tends to show up when we are trying to implement the third-party library, and we can’t change the object in question. In this case, we will still have the instanceOf and the casting, but we can, for example, hide them to an extent with the help of the decorator pattern. Which allows dynamic wrappings of the objects in order to modify their existing responsibilities and behaviors.
+
+$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+
+Java instanceof
+The java instanceof operator is used to test whether the object is an instance of the specified type (class or subclass or interface).
+
+The instanceof in java is also known as type comparison operator because it compares the instance with type. It returns either true or false. If we apply the instanceof operator with any variable that has null value, it returns false.
+
+Simple example of java instanceof
+class Simple1{  
+ public static void main(String args[]){  
+ Simple1 s=new Simple1();  
+ System.out.println(s instanceof Simple1);//true  
+ }  
+}
+
+An object of subclass type is also a type of parent class. For example, if Dog extends Animal then object of Dog can be referred by either Dog or Animal class.
+Another example of java instanceof operator
+class Animal{}  
+class Dog1 extends Animal{//Dog inherits Animal  
+  
+ public static void main(String args[]){  
+ Dog1 d=new Dog1();  
+ System.out.println(d instanceof Animal);//true  
+ }  
+}
+
+instanceof in java with a variable that have null value
+If we apply instanceof operator with a variable that have null value, it returns false. Let's see the example given below where we apply instanceof operator with the variable that have null value.
+class Dog2{  
+ public static void main(String args[]){  
+  Dog2 d=null;  
+  System.out.println(d instanceof Dog2);//false  
+ }  
+}
+
+$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+
+Downcasting with java instanceof operator
+
+When Subclass type refers to the object of Parent class, it is known as downcasting. If we perform it directly, compiler gives Compilation error. If you perform it by typecasting, ClassCastException is thrown at runtime. But if we use instanceof operator, downcasting is possible.
+
+Dog d=new Animal();//Compilation error
+
+If we perform downcasting by typecasting, ClassCastException is thrown at runtime.
+Dog d=(Dog)new Animal();  
+//Compiles successfully but ClassCastException is thrown at runtime  
+
+Possibility of downcasting with instanceof
+class Animal { }  
+  
+class Dog3 extends Animal {  
+  static void method(Animal a) {  
+    if(a instanceof Dog3){  
+       Dog3 d=(Dog3)a;//downcasting  
+       System.out.println("ok downcasting performed");  
+    }  
+  }  
+   
+  public static void main (String [] args) {  
+    Animal a=new Dog3();  
+    Dog3.method(a);  
+  }  
+    
+ }
+
+ 
+Downcasting without the use of java instanceof
+Downcasting can also be performed without the use of instanceof operator as displayed in the following example:
+class Animal { }  
+class Dog4 extends Animal {  
+  static void method(Animal a) {  
+       Dog4 d=(Dog4)a;//downcasting  
+       System.out.println("ok downcasting performed");  
+  }  
+   public static void main (String [] args) {  
+    Animal a=new Dog4();  
+    Dog4.method(a);  
+  }  
+}
+
+Let's take closer look at this, actual object that is referred by a, is an object of Dog class. So if we downcast it, it is fine. But what will happen if we write:
+
+Animal a=new Animal();  
+Dog.method(a);  
+//Now ClassCastException but not in case of instanceof operator
+
